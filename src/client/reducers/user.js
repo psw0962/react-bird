@@ -150,7 +150,7 @@ const reducer = (state = initialState, action) => {
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         break;
 
       case LOG_IN_FAIRLURE:
@@ -178,19 +178,19 @@ const reducer = (state = initialState, action) => {
 
       // signup
       case SIGN_UP_REQUEST:
-        draft.signUpLoading = true;
-        draft.signUpDone = false;
-        draft.signUpError = null;
+        draft.signupLoading = true;
+        draft.signupDone = false;
+        draft.signupError = null;
         break;
 
       case SIGN_UP_SUCCESS:
-        draft.signUpLoading = false;
-        draft.signUpDone = true;
+        draft.signupLoading = false;
+        draft.signupDone = true;
         break;
 
       case SIGN_UP_FAIRLURE:
-        draft.signUpLoading = false;
-        draft.signUpError = action.error;
+        draft.signupLoading = false;
+        draft.signupError = action.error;
         break;
 
       // nickname

@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Head from 'next/head';
+import Router from 'next/router';
 import { Form, Input, Checkbox, Button } from 'antd';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
@@ -9,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state) => state.user);
+  const { signupLoading, signupDone, signupError } = useSelector((state) => state.user);
 
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
@@ -45,6 +46,18 @@ const Signup = () => {
       data: { email, password, nickname },
     });
   }, [email, password, passwordCheck, term]);
+
+  useEffect(() => {
+    if (signupDone) {
+      Router.push('/');
+    }
+  }, [signupDone]);
+
+  useEffect(() => {
+    if (signupError) {
+      alert(signupError);
+    }
+  }, [signupError]);
 
   return (
     <AppLayout>
@@ -86,7 +99,7 @@ const Signup = () => {
         </div>
 
         <div style={{ marginTop: 10 }}>
-          <Button type="primary" htmlType="submit" loading={signUpLoading}>
+          <Button type="primary" htmlType="submit" loading={signupLoading}>
             가입하기
           </Button>
         </div>
