@@ -17,19 +17,19 @@ const AppLayout = ({ children }) => {
   return (
     <div>
       <Menu mode="horizontal">
-        <Menu.Item>
+        <Menu.Item key="bird">
           <Link href="/">
             <a>bird</a>
           </Link>
         </Menu.Item>
 
-        <Menu.Item>
+        <Menu.Item key="profile">
           <Link href="/profile">
             <a>프로필</a>
           </Link>
         </Menu.Item>
 
-        <Menu.Item>
+        <Menu.Item key="search">
           <SearchInput enterButton />
         </Menu.Item>
       </Menu>

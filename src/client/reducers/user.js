@@ -11,6 +11,11 @@ export const initialState = {
   unfollowDone: false,
   unfollowError: null,
 
+  // loaduser
+  loadUserLoading: false,
+  loadUserDone: false,
+  loadUserError: null,
+
   // login
   logInLoading: false,
   logInDone: false,
@@ -44,6 +49,10 @@ export const FOLLOW_FAIRLURE = 'FOLLOW_FAIRLURE';
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAIRLURE = 'UNFOLLOW_FAIRLURE';
+
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -91,16 +100,6 @@ export const logoutFairureAction = () => {
   };
 };
 
-// dummy
-const dummyUser = (data) => ({
-  ...data,
-  nickname: 'nick',
-  id: 1,
-  Posts: [],
-  Followings: [{ nickname: 'one' }, { nickname: 'two' }, { nickname: 'three' }],
-  Followers: [{ nickname: 'one' }, { nickname: 'two' }, { nickname: 'three' }],
-});
-
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -138,6 +137,24 @@ const reducer = (state = initialState, action) => {
       case UNFOLLOW_FAIRLURE:
         draft.unfollowLoading = false;
         draft.unfollowError = action.error;
+        break;
+
+      // loaduser
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserError = null;
+        draft.loadUserDone = false;
+        break;
+
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadUserLoading = false;
+        draft.me = action.data;
+        draft.loadUserDone = true;
+        break;
+
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
         break;
 
       // login
