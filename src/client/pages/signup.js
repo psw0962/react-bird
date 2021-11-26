@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signupLoading, signupDone, signupError } = useSelector((state) => state.user);
+  const { signupLoading, signupDone, signupError, me } = useSelector((state) => state.user);
 
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
@@ -49,7 +49,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (signupDone) {
-      Router.push('/');
+      Router.replace('/');
     }
   }, [signupDone]);
 
@@ -58,6 +58,12 @@ const Signup = () => {
       alert(signupError);
     }
   }, [signupError]);
+
+  useEffect(() => {
+    if (me && me.id) {
+      Router.replace('/');
+    }
+  }, [me && me.id]);
 
   return (
     <AppLayout>

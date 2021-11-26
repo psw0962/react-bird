@@ -47,7 +47,7 @@ export const UNFOLLOW_FAIRLURE = 'UNFOLLOW_FAIRLURE';
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
-export const LOG_IN_FAIRLURE = 'LOG_IN_FAIRLURE';
+export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
@@ -153,7 +153,7 @@ const reducer = (state = initialState, action) => {
         draft.me = action.data;
         break;
 
-      case LOG_IN_FAIRLURE:
+      case LOG_IN_FAILURE:
         draft.logInLoading = false;
         draft.logInError = action.error;
         break;

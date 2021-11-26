@@ -18,7 +18,7 @@ module.exports = () => {
           });
 
           if (!user) {
-            return done(null, false, { resaon: '존재하지 않는 사용자입니다.' });
+            return done(null, false, { reason: '존재하지 않는 사용자입니다.' });
           }
 
           // 입력한 비밀번호와 db에 저장 된 비밀번호 체크
