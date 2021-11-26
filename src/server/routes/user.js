@@ -7,6 +7,43 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+// GET/user (새로고침 시 브라우저에 있는 쿠키를 활용해 로그인 유지)
+router.get('/', async (req, res, next) => {
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: {
+          exclude: ['password'],
+        },
+        include: [
+          {
+            model: Post,
+            attributes: ['id'],
+          },
+          {
+            model: User,
+            as: 'Followings',
+            attributes: ['id'],
+          },
+          {
+            model: User,
+            as: 'Followers',
+            attributes: ['id'],
+          },
+        ],
+      });
+
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 // POST/user/login
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
@@ -36,14 +73,17 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post,
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followings',
+            attributes: ['id'],
           },
           {
             model: User,
             as: 'Followers',
+            attributes: ['id'],
           },
         ],
       });

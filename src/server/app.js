@@ -3,10 +3,12 @@ const app = express();
 const db = require('./models');
 const cors = require('cors');
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 const passportConfig = require('./passport');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
@@ -24,11 +26,14 @@ passportConfig();
 // dotenv
 dotenv.config();
 
+// morgan(요청기록)
+app.use(morgan('dev'));
+
 // cors
 app.use(
   cors({
-    origin: '*', // 모든 요청 허용
-    credentials: false, // ??
+    origin: true,
+    credentials: true, // 다른 도메인 간에 쿠키 전달할 수 있게
   })
 );
 
@@ -48,24 +53,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-  res.send('hello express');
-});
-
-app.get('/api', (req, res) => {
-  res.send('hello api');
-});
-
-app.get('/posts', (req, res) => {
-  res.json([
-    { id: 1, content: 'hello' },
-    { id: 2, content: 'hello2' },
-    { id: 3, content: 'hello3' },
-  ]);
-});
-
 // rooturl
 app.use('/post', postRouter);
+app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 
 app.listen(3065, () => {
