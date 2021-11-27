@@ -1,18 +1,71 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-const { Post, Image, Comment, User } = require('../models');
+const { Post, Image, Comment, User, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
+try {
+  fs.accessSync('uploads');
+} catch (err) {
+  console.log('uploads 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      // 추후에 aws s3로 변경
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // ex) file.png
+      const basename = path.basename(); // file(파일이름)
+      const ext = path.extname(file.originalname); // .png(확장자)
+      done(null, basename + '_' + new Date().getTime() + ext); // file13124134324.png
+    },
+  }),
+
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+});
+
 // POST/post
-router.post('/', isLoggedIn, async (req, res, next) => {
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   try {
-    console.log('weflijwefoiwjfoijwe', req);
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({
+            where: { name: tag.slice(1).toLowerCase() },
+          })
+        )
+      );
+      // result = [[node, true], [react, true]]
+      await post.addHashtags(result.map((v) => v[0]));
+    }
+
+    if (req.body.image) {
+      // 이미지 여러개인 경우
+      if (Array.isArray(req.body, image)) {
+        const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
+
+        await post.addImages(images);
+      } else {
+        // 단일인 경우
+        const image = await Image.create({ src: req.body.image });
+
+        await post.addImages(image);
+      }
+    }
 
     const fullPost = await Post.findOne({
       where: { id: post.id },
@@ -140,17 +193,9 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
 });
 
 // POST/post/images
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      // 추후에 aws s3로 변경
-      done(null, 'uploads');
-    },
-    filename(req, file, done) {
-      done(null);
-    },
-  }),
+router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
+  console.log(req.files);
+  res.json(req.files.map((v) => v.filename));
 });
-router.post('/images', isLoggedIn, async (req, res, next) => {});
 
 module.exports = router;

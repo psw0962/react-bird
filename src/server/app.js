@@ -8,6 +8,7 @@ const userRouter = require('./routes/user');
 const passportConfig = require('./passport');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const path = require('path');
 const morgan = require('morgan');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -38,8 +39,11 @@ app.use(
 );
 
 // client에서 온 axios요청 파싱처리를 해야 req.data 와 같은 형태로 라우터에서 사용할 수 있다.
-app.use(express.json()); // json data를 req.body에 넣어준다.
+app.use(express.json()); // json data를 req.body에 넣어준다.(axios요청시)
 app.use(express.urlencoded({ extended: true })); // form data를 req.body에 넣어준다.
+
+// static
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 
 // middle ware
 app.use(cookieParser(process.env.COOKIE_SECRET));
