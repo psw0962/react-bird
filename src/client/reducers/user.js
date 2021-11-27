@@ -36,7 +36,22 @@ export const initialState = {
   changeNicknameDone: false,
   changeNicknameError: null,
 
-  //data
+  // loadfollowers
+  loadFollowersLoadding: false,
+  loadFollowersDone: false,
+  loadFollowersError: null,
+
+  // loadfollowings
+  loadFollowingsLoadding: false,
+  loadFollowingsDone: false,
+  loadFollowingsError: null,
+
+  // removefollowers
+  removeFollowerLoadding: false,
+  removeFollowerDone: false,
+  removeFollowerError: null,
+
+  // data
   me: null,
   signUpData: {},
   loginData: {},
@@ -49,6 +64,18 @@ export const FOLLOW_FAIRLURE = 'FOLLOW_FAIRLURE';
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAIRLURE = 'UNFOLLOW_FAIRLURE';
+
+export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
+export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
+export const REMOVE_FOLLOWER_FAIRLURE = 'REMOVE_FOLLOWER_FAIRLURE';
+
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAIRLURE = 'LOAD_FOLLOWERS_FAIRLURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAIRLURE = 'LOAD_FOLLOWINGS_FAIRLURE';
 
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
@@ -103,6 +130,60 @@ export const logoutFairureAction = () => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      // removefollower
+      case REMOVE_FOLLOWER_REQUEST:
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerError = null;
+        draft.removeFollowerDone = false;
+        break;
+
+      case REMOVE_FOLLOWER_SUCCESS:
+        draft.removeFollowerLoading = false;
+        draft.me.Followers = draft.me.Followers.filter((v) => v.id !== action.data.UserId);
+        draft.removeFollowerDone = true;
+        break;
+
+      case REMOVE_FOLLOWER_FAIRLURE:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerError = action.error;
+        break;
+
+      // loadfollowers
+      case LOAD_FOLLOWERS_REQUEST:
+        draft.followLoading = true;
+        draft.followError = null;
+        draft.followDone = false;
+        break;
+
+      case LOAD_FOLLOWERS_SUCCESS:
+        draft.followLoading = false;
+        draft.followDone = true;
+        draft.me.Followers = action.data;
+        break;
+
+      case LOAD_FOLLOWERS_FAIRLURE:
+        draft.followLoading = false;
+        draft.followError = action.error;
+        break;
+
+      // loadfollowings
+      case LOAD_FOLLOWINGS_REQUEST:
+        draft.followLoading = true;
+        draft.followError = null;
+        draft.followDone = false;
+        break;
+
+      case LOAD_FOLLOWINGS_SUCCESS:
+        draft.followLoading = false;
+        draft.followDone = true;
+        draft.me.Followings = action.data;
+        break;
+
+      case LOAD_FOLLOWINGS_FAIRLURE:
+        draft.followLoading = false;
+        draft.followError = action.error;
+        break;
+
       // follow
       case FOLLOW_REQUEST:
         draft.followLoading = true;
@@ -113,7 +194,7 @@ const reducer = (state = initialState, action) => {
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.Followings.push({ id: action.data });
+        draft.me.Followings.push({ id: action.data.UserId });
         break;
 
       case FOLLOW_FAIRLURE:
@@ -131,7 +212,7 @@ const reducer = (state = initialState, action) => {
       case UNFOLLOW_SUCCESS:
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
-        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data.UserId);
         break;
 
       case UNFOLLOW_FAIRLURE:
@@ -218,6 +299,7 @@ const reducer = (state = initialState, action) => {
         break;
 
       case CHANGE_NICKNAME_SUCCESS:
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoadding = false;
         draft.changeNicknameDone = true;
         break;

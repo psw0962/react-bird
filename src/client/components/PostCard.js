@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
@@ -43,14 +43,17 @@ const PostCard = ({ post }) => {
   }, []);
 
   const liked = post.Likers.find((v) => v.id === id);
-  console.log('qweqwrgthrhr', post.Likers);
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
-          liked ? <HeartTwoTone key="heart" towtonecolor="#eb2f96" onClick={onUnLike} /> : <HeartOutlined key="heart" onClick={onLike} />,
+          liked ? (
+            <HeartTwoTone key="heart" towtonecolor="#eb2f96" onClick={onUnLike} />
+          ) : (
+            <HeartOutlined key="heart" onClick={onLike} />
+          ),
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
             key="more"
@@ -74,7 +77,11 @@ const PostCard = ({ post }) => {
         ]}
         extra={id && <FollowButton post={post} />}
       >
-        <Card.Meta avatar={<Avatar>{post.User.nickname[0]}</Avatar>} title={post.User.nickname} description={<PostCardContent postData={post.content} />} />
+        <Card.Meta
+          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+          title={post.User.nickname}
+          description={<PostCardContent postData={post.content} />}
+        />
       </Card>
 
       {commentFormOpened && (
@@ -86,7 +93,11 @@ const PostCard = ({ post }) => {
             dataSource={post.Comments}
             renderItem={(item) => (
               <li>
-                <Comment author={item.User.nickname} avatar={<Avatar>{item.User.nickname[0]}</Avatar>} content={item.content} />
+                <Comment
+                  author={item.User.nickname}
+                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                  content={item.content}
+                />
               </li>
             )}
           />

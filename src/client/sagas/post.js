@@ -1,4 +1,5 @@
 import { all, fork, put, takeLatest, call } from '@redux-saga/core/effects';
+import { NoStyleItemContext } from 'antd/lib/form/context';
 import axios from 'axios';
 
 import {
@@ -61,6 +62,7 @@ function* addPost(action) {
       data: result.data.id,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: ADD_POST_FAILURE,
       data: err.response.data,
@@ -70,7 +72,7 @@ function* addPost(action) {
 
 // removepost
 function removePostAPI(data) {
-  return axios.post('/posts', data);
+  return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
@@ -182,5 +184,12 @@ function* watchUnLikePost() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchCommentPost), fork(watchRemovePost), fork(watchLoadPosts), fork(watchLikePost), fork(watchUnLikePost)]);
+  yield all([
+    fork(watchAddPost),
+    fork(watchCommentPost),
+    fork(watchRemovePost),
+    fork(watchLoadPosts),
+    fork(watchLikePost),
+    fork(watchUnLikePost),
+  ]);
 }

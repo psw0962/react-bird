@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 
 const { Post, Image, Comment, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
@@ -7,6 +8,7 @@ const { isLoggedIn } = require('./middlewares');
 // POST/post
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
+    console.log('weflijwefoiwjfoijwe', req);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
@@ -19,7 +21,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
           model: Image,
         },
         {
-          medel: Comment,
+          model: Comment,
           include: [
             {
               model: User, // 댓글 작성자
@@ -32,14 +34,14 @@ router.post('/', isLoggedIn, async (req, res, next) => {
           attributes: ['id', 'nickname'],
         },
         {
-          model: User, // 좋아요 누른사람
+          model: User, // 좋아요 누른 사람
           as: 'Likers',
           attributes: ['id'],
         },
       ],
     });
 
-    res.status(200).json(fullPost);
+    res.status(201).json(fullPost);
   } catch (err) {
     console.error(err);
     next(err);
@@ -82,8 +84,8 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// PATCH/:postId/like
-router.patch('/:postId/like', async (req, res, next) => {
+// PATCH/post/:postId/like
+router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
       where: { id: req.params.postId },
@@ -102,8 +104,8 @@ router.patch('/:postId/like', async (req, res, next) => {
   }
 });
 
-// DELETE/:postId/like
-router.delete('/:postId/like', async (req, res, next) => {
+// DELETE/post/:postId/like
+router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
       where: { id: req.params.postId },
@@ -122,8 +124,33 @@ router.delete('/:postId/like', async (req, res, next) => {
   }
 });
 
-router.delete('/', (req, res) => {
-  res.json({ id: 1, content: 'hello' });
+// DELETE/post/:postId
+router.delete('/:postId', isLoggedIn, async (req, res, next) => {
+  try {
+    await Post.destroy({
+      where: { id: req.params.postId },
+      UserId: req.user.id,
+    });
+
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
+
+// POST/post/images
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      // 추후에 aws s3로 변경
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      done(null);
+    },
+  }),
+});
+router.post('/images', isLoggedIn, async (req, res, next) => {});
 
 module.exports = router;
