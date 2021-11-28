@@ -16,6 +16,11 @@ export const initialState = {
   loadUserDone: false,
   loadUserError: null,
 
+  // loadmyinfo
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
+
   // login
   logInLoading: false,
   logInDone: false,
@@ -53,6 +58,7 @@ export const initialState = {
 
   // data
   me: null,
+  userInfo: null,
   signUpData: {},
   loginData: {},
 };
@@ -76,6 +82,10 @@ export const LOAD_FOLLOWERS_FAIRLURE = 'LOAD_FOLLOWERS_FAIRLURE';
 export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
 export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
 export const LOAD_FOLLOWINGS_FAIRLURE = 'LOAD_FOLLOWINGS_FAIRLURE';
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
@@ -221,21 +231,39 @@ const reducer = (state = initialState, action) => {
         break;
 
       // loaduser
-      case LOAD_MY_INFO_REQUEST:
+      case LOAD_USER_REQUEST:
         draft.loadUserLoading = true;
         draft.loadUserError = null;
         draft.loadUserDone = false;
         break;
 
-      case LOAD_MY_INFO_SUCCESS:
+      case LOAD_USER_SUCCESS:
         draft.loadUserLoading = false;
         draft.me = action.data;
         draft.loadUserDone = true;
         break;
 
-      case LOAD_MY_INFO_FAILURE:
+      case LOAD_USER_FAILURE:
         draft.loadUserLoading = false;
         draft.loadUserError = action.error;
+        break;
+
+      // loadmyinfo
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoError = null;
+        draft.loadMyInfoDone = false;
+        break;
+
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.me = action.data;
+        draft.loadMyInfoDone = true;
+        break;
+
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
         break;
 
       // login
