@@ -13,6 +13,17 @@ const path = require('path');
 const morgan = require('morgan');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const hpp = require('hpp');
+const helmet = require('helmet');
+
+if (process.env.NODE_ENV === 'production') {
+  // morgan(요청기록)
+  app.use(morgan('combined'));
+  app.use(hpp());
+  app.use(helmet());
+} else {
+  app.use(morgan('dev'));
+}
 
 // connectDB
 db.sequelize
@@ -27,9 +38,6 @@ passportConfig();
 
 // dotenv
 dotenv.config();
-
-// morgan(요청기록)
-app.use(morgan('dev'));
 
 // cors
 app.use(
