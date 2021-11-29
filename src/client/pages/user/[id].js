@@ -4,13 +4,13 @@ import { Avatar, Card } from 'antd';
 import { END } from 'redux-saga';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
-// import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
-import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '../reducers/user';
-import PostCard from '../components/PostCard';
-import wrapper from '../store/configureStore';
-import AppLayout from '../components/AppLayout';
+import axios from 'axios';
+import { LOAD_USER_POSTS_REQUEST } from '../../reducers/post';
+import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '../../reducers/user';
+import PostCard from '../../components/PostCard';
+import wrapper from '../../store/configureStore';
+import AppLayout from '../../components/AppLayout';
 
 const User = () => {
   const dispatch = useDispatch();
@@ -48,10 +48,11 @@ const User = () => {
           <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
           <meta property="og:title" content={`${userInfo.nickname}님의 게시글`} />
           <meta property="og:description" content={`${userInfo.nickname}님의 게시글`} />
-          <meta property="og:image" content="https://bird.com/favicon.png" />
+          <meta property="og:image" content="https://bird.com/favicon.ico" />
           <meta property="og:url" content={`https://bird.com/user/${id}`} />
         </Head>
       )}
+
       {userInfo && userInfo.id !== me?.id ? (
         <Card
           style={{ marginBottom: 20 }}
@@ -91,23 +92,18 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
     axios.defaults.headers.Cookie = cookie;
   }
 
-  //   context.store.dispatch({
-  //     type: LOAD_USER_POSTS_REQUEST,
-  //     data: context.params.id,
-  //   });
+  context.store.dispatch({
+    type: LOAD_USER_POSTS_REQUEST,
+    data: context.params.id,
+  });
 
-  //   context.store.dispatch({
-  //     type: LOAD_MY_INFO_REQUEST,
-  //   });
-
-  //   context.store.dispatch({
-  //     type: LOAD_USER_REQUEST,
-  //     data: context.params.id,
-  //   });
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
 
   context.store.dispatch({
     type: LOAD_USER_REQUEST,
-    data: 27,
+    data: context.params.id,
   });
 
   context.store.dispatch(END);

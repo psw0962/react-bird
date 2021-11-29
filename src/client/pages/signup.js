@@ -73,7 +73,7 @@ const Signup = () => {
   return (
     <AppLayout>
       <Head>
-        <title>내 프로필 | NodeBird</title>
+        <title>내 프로필 | Bird</title>
       </Head>
 
       <Form onFinish={onSubmit}>
