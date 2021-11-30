@@ -21,8 +21,22 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
+
+  app.use(
+    cors({
+      origin: 'http://13.125.207.66',
+      credentials: true,
+    })
+  );
 } else {
   app.use(morgan('dev'));
+
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
 }
 
 // connectDB
@@ -38,14 +52,6 @@ passportConfig();
 
 // dotenv
 dotenv.config();
-
-// cors
-app.use(
-  cors({
-    origin: ['http://13.125.207.66', 'http://localhost:3060'],
-    credentials: true, // 다른 도메인 간에 쿠키 전달할 수 있게
-  })
-);
 
 // client에서 온 axios요청 파싱처리를 해야 req.data 와 같은 형태로 라우터에서 사용할 수 있다.
 app.use(express.json()); // json data를 req.body에 넣어준다.(axios요청시)
