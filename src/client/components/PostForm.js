@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
 import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
 import { REMOVE_IMAGE } from '../reducers/post';
+import { serverUrl } from '../config/config';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, idx) => (
           <div key={v} style={{ display: 'inline-block' }}>
-            <img src={`http://localhost:3065/${v}`} style={{ width: '200px' }} alt={v} />
+            <img src={`${serverUrl}/${v}`} style={{ width: '200px' }} alt={v} />
 
             <div>
               <Button onClick={onRemoveImage(idx)}>제거</Button>

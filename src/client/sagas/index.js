@@ -2,8 +2,9 @@ import { all, fork, call, put, take, takeEvery, throttle, delay, debounce } from
 import userSaga from './user';
 import postSaga from './post';
 import axios from 'axios';
+import { serverUrl } from '../config/config';
 
-axios.defaults.baseURL = 'http://localhost:3065';
+axios.defaults.baseURL = serverUrl;
 axios.defaults.withCredentials = true; // 다른 도메인 간에 쿠키전달 할 수 있게
 
 // redux middleware : 리덕스에 필요한 기능을 끼워 넣는다.(기능향상)
