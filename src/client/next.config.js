@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   compress: true, // gzip
   webpack(config, { webpack }) {
-    const prod = process.env.NODE_ENV === 'production';
+    const prod = process.env.NODE_ENV === 'development';
 
     return {
       ...config,
