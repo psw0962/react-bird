@@ -17,17 +17,14 @@ try {
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, done) {
-      // 추후에 aws s3로 변경
       done(null, 'uploads');
     },
     filename(req, file, done) {
-      // ex) file.png
-      const basename = path.basename(); // file(파일이름)
-      const ext = path.extname(file.originalname); // .png(확장자)
-      done(null, basename + '_' + new Date().getTime() + ext); // file13124134324.png
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 파일명
+      done(null, basename + '_' + new Date().getTime() + ext); // 파일명.png
     },
   }),
-
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 });
 
@@ -55,7 +52,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 
     if (req.body.image) {
       // 이미지 여러개인 경우
-      if (Array.isArray(req.body, image)) {
+      if (Array.isArray(req.body.image)) {
         const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
 
         await post.addImages(images);
@@ -194,7 +191,6 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
 
 // POST/post/images
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
-  console.log(req.files);
   res.json(req.files.map((v) => v.filename));
 });
 
