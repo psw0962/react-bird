@@ -42,7 +42,7 @@ dotenv.config();
 // cors
 app.use(
   cors({
-    origin: 'http://13.125.207.66',
+    origin: ['http://13.125.207.66', 'http://localhost:3060'],
     credentials: true, // 다른 도메인 간에 쿠키 전달할 수 있게
   })
 );
