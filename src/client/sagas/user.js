@@ -24,16 +24,16 @@ import {
   SIGN_UP_REQUEST,
   CHANGE_NICKNAME_REQUEST,
   CHANGE_NICKNAME_SUCCESS,
-  CHANGE_NICKNAME_FAIRLURE,
+  CHANGE_NICKNAME_FAILURE,
   LOAD_FOLLOWERS_REQUEST,
   LOAD_FOLLOWERS_SUCCESS,
-  LOAD_FOLLOWERS_FAIRLURE,
+  LOAD_FOLLOWERS_FAILURE,
   LOAD_FOLLOWINGS_REQUEST,
   LOAD_FOLLOWINGS_SUCCESS,
-  LOAD_FOLLOWINGS_FAIRLURE,
+  LOAD_FOLLOWINGS_FAILURE,
   REMOVE_FOLLOWER_REQUEST,
   REMOVE_FOLLOWER_SUCCESS,
-  REMOVE_FOLLOWER_FAIRLURE,
+  REMOVE_FOLLOWER_FAILURE,
 } from '../reducers/user';
 
 // follow
@@ -191,7 +191,7 @@ function* changeNickname(action) {
     });
   } catch (err) {
     yield put({
-      type: CHANGE_NICKNAME_FAIRLURE,
+      type: CHANGE_NICKNAME_FAILURE,
       error: err.response.data,
     });
   }
@@ -211,7 +211,7 @@ function* loadFollowers(action) {
     });
   } catch (err) {
     yield put({
-      type: LOAD_FOLLOWERS_FAIRLURE,
+      type: LOAD_FOLLOWERS_FAILURE,
       error: err.response.data,
     });
   }
@@ -231,7 +231,7 @@ function* loadFollowings(action) {
     });
   } catch (err) {
     yield put({
-      type: LOAD_FOLLOWINGS_FAIRLURE,
+      type: LOAD_FOLLOWINGS_FAILURE,
       error: err.response.data,
     });
   }
@@ -251,7 +251,7 @@ function* removeFollower(action) {
     });
   } catch (err) {
     yield put({
-      type: REMOVE_FOLLOWER_FAIRLURE,
+      type: REMOVE_FOLLOWER_FAILURE,
       error: err.response.data,
     });
   }

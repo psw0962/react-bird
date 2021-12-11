@@ -29,7 +29,8 @@
   "react/function-component-definition": [
     2,
     {
-      "namedComponents": "function-declaration"
+      "namedComponents": "function-declaration",
+      "unnamedComponents": "arrow-function"
     }
   ]
 }
