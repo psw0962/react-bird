@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true; // 다른 도메인 간에 쿠키전달 �
 // redux middleware : 리덕스에 필요한 기능을 끼워 넣는다.(기능향상)
 // redux thunk : 비동기 액션을 만들 수 있다. 지연의 의미를 가진다. dispatch를 묶어서 여러번 호출할 수 있고 한 번에 할 수 있다.
 
-// redux saga : thunk는 단순히 dispact를 여러번 호출하고 비동기적으로 실행할 수 있다면,
+// redux saga : thunk는 단순히 dispatch를 여러번 호출하고 비동기적으로 실행할 수 있다면,
 // saga는 여러가지의 기능을 사용할 수 있다.
 
 // call은 동기, await과 같은 효과
