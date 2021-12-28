@@ -48,12 +48,6 @@ const AppLayout = ({ children }) => {
         <Col xs={24} md={12}>
           {children}
         </Col>
-
-        <Col xs={24} md={6}>
-          <a href="https://naver.com" target="_blank" rel="noreferrer noopener">
-            naver
-          </a>
-        </Col>
       </Row>
     </div>
   );

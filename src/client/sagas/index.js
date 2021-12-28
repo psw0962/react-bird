@@ -1,7 +1,7 @@
-import { all, fork, call, put, take, takeEvery, throttle, delay, debounce } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
+import axios from 'axios';
 import userSaga from './user';
 import postSaga from './post';
-import axios from 'axios';
 import { serverUrl } from '../config/config';
 
 axios.defaults.baseURL = serverUrl;

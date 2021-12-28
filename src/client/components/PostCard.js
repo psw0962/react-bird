@@ -57,6 +57,7 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, [id]);
+
   const onUnlike = useCallback(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
@@ -66,6 +67,7 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, [id]);
+
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
   }, []);
